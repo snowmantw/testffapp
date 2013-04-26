@@ -1,1 +1,297 @@
-Setting up pages...
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Tracking Clock</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Place favicon.ico in the root directory -->
+
+    <!--
+    <link rel="stylesheet" href="css/app.css">
+    -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).on("mobileinit", function(){
+            $.mobile.defaultPageTransition = 'slide';
+        });
+    </script>
+    <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTAVh9e6jwM27eQ3VJ9B1eQ35WXsCkgqQ&sensor=true">
+    </script>
+    <script type="text/javascript">
+        map = "";
+        map2 = "";
+        function mapInitialize() {
+            var mapOptions = {
+                center: new google.maps.LatLng(-34.397, 150.644),
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true,
+            };
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            map2 = new google.maps.Map(document.getElementById("map-canvas-2"), mapOptions);
+        }
+        touchMove = function(event) {
+            event.preventDefault();
+        }
+        google.maps.event.addDomListener(window, 'load', mapInitialize);
+
+
+
+    </script>
+
+    <script type="text/javascript">
+        $(function(){
+            navigator.geolocation.watchPosition(
+                function(data){console.debug(data);},
+                function(data){console.debug(data);},
+                { enableHighAccuracy: true }
+            );
+
+
+            $(document).on('pageshow', function(){
+                google.maps.event.trigger(map, 'resize');
+                google.maps.event.trigger(map2, 'resize');
+            });
+        });
+        
+    </script>
+    <style type="text/css">
+        .ui-page {
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+        }
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        #map-canvas {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        #map-canvas-2 {
+            height: 45%;
+        }
+        #addplace {
+            height: 100%;
+        }
+        /*
+        body, div[data-role="page"], div[data-role="content"], .swipeArea {
+            height: 100%;
+            width: 100%;
+        }
+        */
+        div[data-role="page"] {
+            height: 100%;
+        }
+        div[data-role="content"] {
+        }
+        div[data-role="header"] {
+            z-index: 10;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- FB SDK -->
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '135551626635497', // App ID
+                channelUrl : '//littleq0903.github.io/testffapp/channel.html', // Channel File
+                status     : true, // check login status
+                cookie     : true, // enable cookies to allow the server to access the session
+                xfbml      : true  // parse XFBML
+            });
+
+            //FB.Event.subscribe('auth.statusChange', handleStatusChange);
+        };
+
+        // Load the SDK Asynchronously
+        (function(d){
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement('script'); js.id = id; js.async = true;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document));
+
+        function loginUser () {
+            var loginUserHandler = function (response) {
+                console.log('login response:');
+                console.log(response);
+            }
+            FB.login(loginUserHandler,{scope: 'email'})
+        }
+    </script>
+    <!-- Use this installation button to install locally without going
+         through the marketpace (see app.js) -->
+
+    <!-- Homepage:start -->
+    <div data-role="page" id="home">
+    <div data-role="header" data-position="fixed">
+        <a href="#" onclick="loginUser();">Login</a>
+        <h1>Tracking Clock</h1>
+        <a href="#addfriend" class="ui-state-persist ui-btn-right" data-icon="plus">Add</a>
+
+    </div>
+
+    <div data-role="content">
+    <ul data-role="listview">
+        <li>
+        <a href="#placedetail" class="ui-state-persist">
+            <h2>Home</h2>
+            <p>Colin Su, Vista and Mom</p>
+        </a>
+        </li>
+
+
+        <!-- begin of testing items -->
+        <li>
+        <a href="#placedetail" class="ui-state-persist">
+            <h2>NCCU</h2>
+            <p>Carol, Alan Huang and other 3 members are here.</p>
+        </a>
+        </li>
+        <li>
+        <a href="#placedetail" class="ui-state-persist">
+            <h2>Su's Office</h2>
+            <p>Nobody</p>
+        </a>
+        </li>
+
+        <!-- end of testing items -->
+
+
+        <!-- add place button -->
+
+        <li data-icon="plus" data-theme="b">
+        <a href="#addplace" class="ui-state-persist">
+            <h2>Add Place...</h2>
+        </a>
+        </li>
+    
+    </ul>
+    </div>
+
+    <button id="install-btn">Install</button>
+    </div>
+    <!-- Homepage:end -->
+
+    <!-- Add Friend:start -->
+    <div data-role="page" data-add-back-btn="true" id="addfriend">
+        <div data-role="header" data-position="fixed">
+            <h1>Add Friend</h1>
+        </div>
+        <div data-role="content">
+        <ul data-role="listview" data-split-icon="plus" data-autodividers="true" data-filter="true">
+            <!-- better sorted -->
+            <li><a href="#">
+                <img src="" alt="" />
+                <h2>Colin Su</h2>
+                <p>Status</p>
+                <a href="#" >Select Friend to Add</a>
+            </a></li>
+
+            <!-- test data -->
+            <li><a href="#">
+                <img src="" alt="" />
+                <h2>Alice Su</h2>
+                <p>Status</p>
+                <a href="#" >Select Friend to Add</a>
+            </a></li>
+            <li><a href="#">
+                <img src="" alt="" />
+                <h2>Beta Su</h2>
+                <p>Status</p>
+                <a href="#" >Select Friend to Add</a>
+            </a></li>
+            <li><a href="#">
+                <img src="" alt="" />
+                <h2>Colin Su</h2>
+                <p>Status</p>
+                <a href="#" >Select Friend to Add</a>
+            </a></li>
+            <li><a href="#">
+                <img src="" alt="" />
+                <h2>Colin Su</h2>
+                <p>Status</p>
+                <a href="#" >Select Friend to Add</a>
+            </a></li>
+            <li><a href="#">
+                <img src="" alt="" />
+                <h2>Colin Su</h2>
+                <p>Status</p>
+                <a href="#" >Select Friend to Add</a>
+            </a></li>
+            <!-- test data -->
+        </ul>
+        </div>
+    </div>
+    <!-- Add Friend:end -->
+
+    <!-- Add Place: start -->
+    <!-- Main add page: start -->
+    <div ontouchmove="touchMove(event)" data-role="page" data-add-back-btn="true" id="addplace">
+        <div data-role="header">
+            <h1>Add Place</h1>
+            <a href="#" class="ui-btn-right">Done</a>
+            <input type="search" name="placename" id="addplace_search" value=""/>
+        </div>
+        <div date-role="content">
+            <div id="map-canvas"></div>
+        </div>
+    </div>
+    <!-- Main add page: end -->
+    <!-- enter name page: start -->
+    <div data-role="page" data-add-back-btn="true" id="placename">
+    </div>
+    <!-- enter name page: end -->
+
+    <!-- Add Place: end -->
+
+    <!-- Place Detail: start -->
+    <div data-role="page" data-add-back-btn="true" id="placedetail">
+        <div data-role="header" data-position="fixed">
+            <h1>Place Detail</h1>
+        </div>
+            <div id="map-canvas-2"></div>
+        <div data-role="content">
+            <ul data-role="listview">
+                <li><a href="#">
+                    <h2>Colin Su</h2>
+                </a></li>
+                <li><a href="#">
+                    <h2>Alice Lin</h2>
+                </a></li>
+                <li><a href="#">
+                    <h2>Holly Chen</h2>
+                </a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Place Detail: end -->
+
+
+    
+
+    <!-- Using require.js, a module system for javascript, include the
+         js files. This loads "main.js", which in turn can load other
+         files, all handled by require.js:
+         http://requirejs.org/docs/api.html#jsfiles -->
+    <script type="text/javascript"
+            data-main="js/init.js"
+            src="js/lib/require.js"></script>
+  </body>
+</html>
